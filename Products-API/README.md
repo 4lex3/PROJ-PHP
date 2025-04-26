@@ -9,7 +9,13 @@
     }
 
     ```
-
+- **Normal**
+  ```json
+  {
+    "email": "albarputero@gmail.com",
+    "password": "albaroputero" 
+  }
+  ```
 
 
 
