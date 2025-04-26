@@ -61,6 +61,15 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => [
+                    'id' => $user->role->id ?? null,
+                    'name' => $user->role->name ?? null
+                ]
+            ]
         ]);
     }
 
@@ -98,10 +107,21 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->with('role')->first();
         $token = $user->createToken('auth_token')->plainTextToken;
+        // Forzar recarga de la relación por si acaso
+        $user->load('role');
 
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => [
+                    'id' => $user->role->id ?? null,
+                    'name' => $user->role->name ?? null
+                ]
+            ]
         ]);
     }
 

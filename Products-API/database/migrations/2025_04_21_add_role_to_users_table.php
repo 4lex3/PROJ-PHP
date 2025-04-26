@@ -10,15 +10,12 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->enum('role', ['admin', 'user'])->default('user');
-        });
+        // Eliminado: esta migración ya no es necesaria porque solo se usará role_id
+        // Puedes eliminar esta migración o dejarla vacía.
     }
 
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('role');
-        });
+        // Nada que revertir
     }
 }; 

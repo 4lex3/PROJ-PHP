@@ -15,6 +15,17 @@
         </tr>
       </thead>
       <tbody>
+        <tr v-if="sortedProducts.length === 0">
+          <td :colspan="isAdmin ? 5 : 4" style="text-align:center; padding: 2rem;">
+            <span v-if="isAdmin">
+              No hay productos. <br/>
+              <button @click="showCreateModal = true" class="add-first-btn">Añadir el primer producto</button>
+            </span>
+            <span v-else>
+              No hay productos disponibles.
+            </span>
+          </td>
+        </tr>
         <tr v-for="product in sortedProducts" :key="product.id">
           <td>{{ product.name }}</td>
           <td>{{ product.description }}</td>
@@ -71,6 +82,16 @@ export default {
     const sortField = ref('name');
     const sortDirection = ref('asc');
     const isAdmin = ref(false);
+
+    // Refuerza el control: detecta cambios en localStorage y en el ciclo de vida
+    const checkAdmin = () => {
+      const role = (localStorage.getItem('role') || '').toLowerCase();
+      isAdmin.value = role === 'admin';
+    };
+    checkAdmin();
+    // Si el usuario manipula localStorage, el estado se actualiza
+    window.addEventListener('storage', checkAdmin);
+
     const formData = ref({
       name: '',
       description: '',
@@ -182,8 +203,7 @@ export default {
 
     onMounted(async () => {
       await getProducts();
-      // Check if user is admin based on token (you might want to implement this differently)
-      isAdmin.value = true; // For now, we'll assume all authenticated users are admins
+      // NO tocar isAdmin aquí: solo el rol admin debe ver los botones
     });
 
     return {

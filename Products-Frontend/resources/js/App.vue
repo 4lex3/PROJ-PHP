@@ -35,7 +35,9 @@ export default {
         await axios.post('http://127.0.0.1:8000/api/logout', {}, {
           headers: { Authorization: `Bearer ${token}` }
         });
+        // Elimina todos los datos sensibles del usuario
         localStorage.removeItem('token');
+        localStorage.removeItem('role');
         isAuthenticated.value = false;
         window.location.href = '/login';
       } catch (error) {

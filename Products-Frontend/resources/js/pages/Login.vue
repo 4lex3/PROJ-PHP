@@ -13,6 +13,10 @@
         </div>
         <button type="submit">Sign In</button>
       </form>
+      <div class="register-link">
+        <span>Don't have an account?</span>
+        <button type="button" @click="goToRegister" class="register-btn">Register</button>
+      </div>
     </div>
   </div>
 </template>
@@ -37,6 +41,12 @@ export default {
         });
         
         localStorage.setItem('token', response.data.access_token);
+        // Guardar el rol si viene en la respuesta
+        if (response.data.user && response.data.user.role && response.data.user.role.name) {
+          localStorage.setItem('role', response.data.user.role.name);
+        } else {
+          localStorage.setItem('role', 'user'); // fallback
+        }
         router.push('/products');
         window.location.reload();
       } catch (error) {
@@ -45,10 +55,15 @@ export default {
       }
     };
 
+    const goToRegister = () => {
+      router.push('/register');
+    };
+
     return {
       email,
       password,
-      handleSubmit
+      handleSubmit,
+      goToRegister
     };
   }
 }
